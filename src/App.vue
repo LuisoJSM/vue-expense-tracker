@@ -1,11 +1,15 @@
 <script setup>
-  import { ref } from 'vue'
+import { ref } from 'vue'
 import Budget from "./components/Budget.vue";
+import BudgetControl from './components/BudgetControl.vue';
+
 
 const budget = ref(0)
+const available = ref(0)
 
 const setBudget = (amount) => {
-budget.value = amount;
+  budget.value = amount;
+  available.value = amount;
 }
 </script>
 
@@ -13,13 +17,12 @@ budget.value = amount;
   <header>
     <h1>Expense tracker</h1>
     <div class="container-header container shadow">
-      <Budget 
-      v-if="budget===0"
-      @set-budget="setBudget"
-      />
-      
+      <Budget v-if="budget === 0" @set-budget="setBudget" />
+
+      <BudgetControl v-else :budget="budget" :available="available"/>
+
     </div>
-    
+
   </header>
 </template>
 
@@ -53,12 +56,15 @@ body {
 h1 {
   font-size: 4rem;
 }
+
 h2 {
   font-size: 3rem;
 }
+
 header {
   background-color: var(--blue);
 }
+
 header h1 {
   padding: 3rem 0;
   margin: 0;
@@ -79,7 +85,7 @@ header h1 {
 }
 
 .shadow {
-  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
   background-color: var(--white);
   border-radius: 1.2rem;
   padding: 5rem;

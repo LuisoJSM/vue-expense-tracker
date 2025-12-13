@@ -8,14 +8,19 @@ const error = ref('')
 const emit = defineEmits(['set-Budget'])
 
 const setBudget = () => {
-   if (budget.value <= 0) {
-      error.value = 'The Amount entered is not valid'
-      setTimeout(() => {
-         error.value = '';
-      }, 3000);
-   }
-   emit('set-Budget', budget.value)
-}
+  const value = Number(budget.value);
+
+  if (isNaN(value) || value <= 0) {
+    error.value = 'The amount entered is not valid';
+    setTimeout(() => {
+      error.value = '';
+    }, 3000);
+    return;
+  }
+
+  emit('set-Budget', value);
+};
+
 
 </script>
 
