@@ -1,8 +1,15 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import Budget from "./components/Budget.vue";
 import BudgetControl from './components/BudgetControl.vue';
+import Modal from './components/Modal.vue';
+import iconNewExpense from './assets/img/nuevo-gasto.svg'
 
+
+const modal = reactive({
+  show: false,
+  animate: false
+})
 
 const budget = ref(0)
 const available = ref(0)
@@ -11,6 +18,27 @@ const setBudget = (amount) => {
   budget.value = amount;
   available.value = amount;
 }
+
+const showModal = () => {
+  modal.show = true
+
+  setTimeout(() => {
+    modal.animate = true
+  }, 300);
+
+
+}
+
+
+const closeModal = () => {
+  modal.animate = false
+  setTimeout(() => {
+    modal.show = false
+  }, 300);
+}
+
+
+
 </script>
 
 <template>
@@ -19,11 +47,21 @@ const setBudget = (amount) => {
     <div class="container-header container shadow">
       <Budget v-if="budget === 0" @set-budget="setBudget" />
 
-      <BudgetControl v-else :budget="budget" :available="available"/>
+      <BudgetControl v-else :budget="budget" :available="available" />
 
     </div>
 
   </header>
+
+
+  <main v-if="budget > 0">
+    <div class="create-expense">
+      <img :src="iconNewExpense" alt="icon New Expense" @click="showModal">
+    </div>
+    <Modal v-if="modal.show" @close-modal="closeModal" :modal="modal" />
+  </main>
+
+
 </template>
 
 <style>
@@ -89,5 +127,16 @@ header h1 {
   background-color: var(--white);
   border-radius: 1.2rem;
   padding: 5rem;
+}
+
+.create-expense {
+  position: fixed;
+  bottom: 5rem;
+  right: 5rem;
+}
+
+.create-expense img {
+  width: 5rem;
+  cursor: pointer;
 }
 </style>
