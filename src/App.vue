@@ -1,67 +1,117 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, watch } from "vue";
 import Budget from "./components/Budget.vue";
-import BudgetControl from './components/BudgetControl.vue';
-import Modal from './components/Modal.vue';
-import iconNewExpense from './assets/img/nuevo-gasto.svg'
-
+import BudgetControl from "./components/BudgetControl.vue";
+import Expense from "./components/Expense.vue";
+import Modal from "./components/Modal.vue";
+import iconNewExpense from "./assets/img/nuevo-gasto.svg";
+import { generateId } from "./helpers";
 
 const modal = reactive({
   show: false,
-  animate: false
-})
+  animate: false,
+});
 
-const budget = ref(0)
-const available = ref(0)
+const budget = ref(0);
+
+const available = ref(0);
+const spent = ref(0);
+
+const expense = reactive({
+  name: "",
+  amount: "",
+  category: "",
+  id: null,
+  date: Date.now,
+});
+
+const expenses = ref([]);
+
+watch(expenses, () => {
+const totalSpent = expenses.value.reduce((total, expense) => expense.amount + total, 0)
+spent.value = totalSpent
+}, {
+  deep: true
+})
 
 const setBudget = (amount) => {
   budget.value = amount;
   available.value = amount;
-}
+};
 
 const showModal = () => {
-  modal.show = true
+  modal.show = true;
 
   setTimeout(() => {
-    modal.animate = true
+    modal.animate = true;
   }, 300);
-
-
-}
-
+};
 
 const closeModal = () => {
-  modal.animate = false
+  modal.animate = false;
   setTimeout(() => {
-    modal.show = false
+    modal.show = false;
   }, 300);
-}
+};
 
+const saveExpense = () => {
+  expenses.value.push({
+    ...expense,
+    id: generateId(),
+    date: Date.now(),
+  });
 
+  closeModal();
 
+  Object.assign(expense, {
+    name: "",
+    amount: "",
+    category: "",
+    id: null,
+  });
+};
 </script>
 
 <template>
-  <header>
-    <h1>Expense tracker</h1>
-    <div class="container-header container shadow">
-      <Budget v-if="budget === 0" @set-budget="setBudget" />
+  <div
+  :class="{set: modal.show}"
+  >
+    <header>
+      <h1>Expense tracker</h1>
+      <div class="container-header container shadow">
+        <Budget v-if="budget === 0" @set-budget="setBudget" />
 
-      <BudgetControl v-else :budget="budget" :available="available" />
+        <BudgetControl v-else :budget="budget" :available="available" :spent="spent" />
+      </div>
+    </header>
 
-    </div>
+    <main v-if="budget > 0">
+      <div class="list-expense container">
+        <h2>
+          {{ expenses.length > 0 ? "Expenses" : "There's nothing to show" }}
+        </h2>
 
-  </header>
+        <Expense
+          v-for="expense in expenses"
+          :key="expense.id"
+          :expense="expense"
+        />
+      </div>
 
-
-  <main v-if="budget > 0">
-    <div class="create-expense">
-      <img :src="iconNewExpense" alt="icon New Expense" @click="showModal">
-    </div>
-    <Modal v-if="modal.show" @close-modal="closeModal" :modal="modal" />
-  </main>
-
-
+      <div class="create-expense">
+        <img :src="iconNewExpense" alt="icon New Expense" @click="showModal" />
+      </div>
+      <Modal
+        v-if="modal.show"
+        @close-modal="closeModal"
+        @save-expense="saveExpense"
+        :modal="modal"
+        v-model:name="expense.name"
+        v-model:amount="expense.amount"
+        v-model:category="expense.category"
+      />
+    </main>
+  </div>
 </template>
 
 <style>
@@ -97,6 +147,11 @@ h1 {
 
 h2 {
   font-size: 3rem;
+}
+
+.set {
+  overflow: hidden;
+  height: 100vh;
 }
 
 header {
@@ -138,5 +193,14 @@ header h1 {
 .create-expense img {
   width: 5rem;
   cursor: pointer;
+}
+
+.list-expense {
+  margin-top: 10rem;
+}
+
+.list-expense h2 {
+  font-weight: 900;
+  color: var(--grey-dark);
 }
 </style>
