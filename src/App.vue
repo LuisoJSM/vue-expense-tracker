@@ -42,6 +42,18 @@ watch(
   }
 );
 
+watch(
+  modal,
+  () => {
+    if (!modal.show) {
+      resetStateExpense()
+    }
+  },
+  {
+    deep: true,
+  }
+);
+
 const setBudget = (amount) => {
   budget.value = amount;
   available.value = amount;
@@ -63,21 +75,41 @@ const closeModal = () => {
 };
 
 const saveExpense = () => {
-  expenses.value.push({
-    ...expense,
-    id: generateId(),
-    date: Date.now(),
-  });
+
+
+  if (expense.id) {
+    const { id } = expense
+    const i = expenses.value.findIndex((expense => expense.id === id))
+    expenses.value[i] = {...expense}
+  } else {
+    expenses.value.push({
+      ...expense,
+      id: generateId(),
+      date: Date.now(),
+    });
+  }
+
 
 
   closeModal();
 
+  resetStateExpense()
+};
+
+
+const resetStateExpense = () => {
   Object.assign(expense, {
     name: "",
     amount: "",
     category: "",
     id: null,
   });
+}
+
+const selectExpense = (id) => {
+  const expenseEdit = expenses.value.filter((expense) => expense.id === id)[0];
+  Object.assign(expense, expenseEdit);
+  showModal();
 };
 </script>
 
@@ -88,12 +120,7 @@ const saveExpense = () => {
       <div class="container-header container shadow">
         <Budget v-if="budget === 0" @set-budget="setBudget" />
 
-        <BudgetControl
-          v-else
-          :budget="budget"
-          :available="available"
-          :spent="spent"
-        />
+        <BudgetControl v-else :budget="budget" :available="available" :spent="spent" />
       </div>
     </header>
 
@@ -103,26 +130,15 @@ const saveExpense = () => {
           {{ expenses.length > 0 ? "Expenses" : "There's nothing to show" }}
         </h2>
 
-        <Expense
-          v-for="expense in expenses"
-          :key="expense.id"
-          :expense="expense"
-        />
+        <Expense v-for="expense in expenses" :key="expense.id" :expense="expense" @select-expense="selectExpense" />
       </div>
 
       <div class="create-expense">
         <img :src="iconNewExpense" alt="icon New Expense" @click="showModal" />
       </div>
-      <Modal
-        v-if="modal.show"
-        @close-modal="closeModal"
-        @save-expense="saveExpense"
-        :modal="modal"
-        :available="available"
-        v-model:name="expense.name"
-        v-model:amount="expense.amount"
-        v-model:category="expense.category"
-      />
+      <Modal v-if="modal.show" @close-modal="closeModal" @save-expense="saveExpense" :modal="modal"
+        :available="available" v-model:name="expense.name" v-model:amount="expense.amount"
+        v-model:category="expense.category" />
     </main>
   </div>
 </template>
