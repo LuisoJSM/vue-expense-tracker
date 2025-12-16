@@ -30,10 +30,14 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  available: {
+    type: Number,
+    required: true,
+  }
 });
 
 const addExpense = () => {
-  const { amount, category, name } = props;
+  const { amount, category, name, available } = props;
   if ([name, amount, category].includes("")) {
     error.value = "Todos los campos son obligatorios";
     setTimeout(() => {
@@ -50,8 +54,19 @@ const addExpense = () => {
     return;
   }
 
+  if (amount > available) {
+    error.value = "Has superado el presupuesto disponible";
+    setTimeout(() => {
+      error.value = "";
+    }, 3000);
+    return;
+  }
+
   emit("save-expense");
 };
+
+
+
 </script>
 
 <template>

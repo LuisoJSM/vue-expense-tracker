@@ -27,12 +27,20 @@ const expense = reactive({
 
 const expenses = ref([]);
 
-watch(expenses, () => {
-const totalSpent = expenses.value.reduce((total, expense) => expense.amount + total, 0)
-spent.value = totalSpent
-}, {
-  deep: true
-})
+watch(
+  expenses,
+  () => {
+    const totalSpent = expenses.value.reduce(
+      (total, expense) => expense.amount + total,
+      0
+    );
+    spent.value = totalSpent;
+    available.value = budget.value - totalSpent;
+  },
+  {
+    deep: true,
+  }
+);
 
 const setBudget = (amount) => {
   budget.value = amount;
@@ -61,6 +69,7 @@ const saveExpense = () => {
     date: Date.now(),
   });
 
+
   closeModal();
 
   Object.assign(expense, {
@@ -73,15 +82,18 @@ const saveExpense = () => {
 </script>
 
 <template>
-  <div
-  :class="{set: modal.show}"
-  >
+  <div :class="{ set: modal.show }">
     <header>
       <h1>Expense tracker</h1>
       <div class="container-header container shadow">
         <Budget v-if="budget === 0" @set-budget="setBudget" />
 
-        <BudgetControl v-else :budget="budget" :available="available" :spent="spent" />
+        <BudgetControl
+          v-else
+          :budget="budget"
+          :available="available"
+          :spent="spent"
+        />
       </div>
     </header>
 
@@ -106,6 +118,7 @@ const saveExpense = () => {
         @close-modal="closeModal"
         @save-expense="saveExpense"
         :modal="modal"
+        :available="available"
         v-model:name="expense.name"
         v-model:amount="expense.amount"
         v-model:category="expense.category"
