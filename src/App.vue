@@ -18,7 +18,7 @@ const budget = ref(0);
 const available = ref(0);
 const spent = ref(0);
 
-const filter = ref('');
+const filter = ref("");
 
 const expense = reactive({
   name: "",
@@ -40,7 +40,7 @@ watch(
     spent.value = totalSpent;
     available.value = budget.value - totalSpent;
 
-    localStorage.setItem('expenses', JSON.stringify(expenses.value))
+    localStorage.setItem("expenses", JSON.stringify(expenses.value));
   },
   {
     deep: true,
@@ -60,24 +60,21 @@ watch(
 );
 
 watch(budget, () => {
-  localStorage.setItem('budget', budget.value)
+  localStorage.setItem("budget", budget.value);
 });
 
 onMounted(() => {
-  const BudgetStorage = localStorage.getItem('budget');
-  if(BudgetStorage) {
-    budget.value = Number(BudgetStorage)
-    available.value = Number(BudgetStorage)
+  const BudgetStorage = localStorage.getItem("budget");
+  if (BudgetStorage) {
+    budget.value = Number(BudgetStorage);
+    available.value = Number(BudgetStorage);
   }
 
-
-  const expensesStorage = localStorage.getItem('expenses')
-  if(expensesStorage) {
-    expenses.value = JSON.parse(expensesStorage)
+  const expensesStorage = localStorage.getItem("expenses");
+  if (expensesStorage) {
+    expenses.value = JSON.parse(expensesStorage);
   }
-
-})
-
+});
 
 const setBudget = (amount) => {
   budget.value = amount;
@@ -133,49 +130,47 @@ const selectExpense = (id) => {
 };
 
 const deleteExpense = () => {
-  if (!expense.id) return
+  if (!expense.id) return;
 
-  const confirmDelete = confirm("Are you sure you want to delete this expense?")
+  const confirmDelete = confirm(
+    "Are you sure you want to delete this expense?"
+  );
 
-  if (!confirmDelete) return
+  if (!confirmDelete) return;
 
   expenses.value = expenses.value.filter(
-    expenseState => expenseState.id !== expense.id
-  )
+    (expenseState) => expenseState.id !== expense.id
+  );
 
-  closeModal()
-  resetStateExpense()
-}
+  closeModal();
+  resetStateExpense();
+};
 
 const expensesFiltered = computed(() => {
-  if(filter.value) {
-    return expenses.value.filter(expense => expense.category === filter.value)
+  if (filter.value) {
+    return expenses.value.filter(
+      (expense) => expense.category === filter.value
+    );
   }
   return expenses.value;
-})
-
+});
 
 const resetApp = () => {
-  const confirmDelete = confirm("Are you sure you want to reset the app?")
+  const confirmDelete = confirm("Are you sure you want to reset the app?");
 
-  if (!confirmDelete) return
+  if (!confirmDelete) return;
 
-  
-  budget.value = 0
-  available.value = 0
-  spent.value = 0
-  expenses.value = []
-  filter.value = ''
+  budget.value = 0;
+  available.value = 0;
+  spent.value = 0;
+  expenses.value = [];
+  filter.value = "";
 
-  
-  resetStateExpense()
+  resetStateExpense();
 
-  
-  localStorage.removeItem('budget')
-  localStorage.removeItem('expenses')
-}
-
-
+  localStorage.removeItem("budget");
+  localStorage.removeItem("expenses");
+};
 </script>
 
 <template>
@@ -195,12 +190,12 @@ const resetApp = () => {
     </header>
 
     <main v-if="budget > 0">
-      <Filter
-      v-model:filter="filter"
-      />
+      <Filter v-model:filter="filter" />
       <div class="list-expense container">
         <h2>
-          {{ expensesFiltered.length > 0 ? "Expenses" : "There's nothing to show" }}
+          {{
+            expensesFiltered.length > 0 ? "Expenses" : "There's nothing to show"
+          }}
         </h2>
 
         <Expense
@@ -211,7 +206,11 @@ const resetApp = () => {
         />
       </div>
 
-      <div class="create-expense">
+      <div
+        class="create-expense"
+        :class="{ disabled: available <= 0 }"
+        @click="available > 0 && showModal()"
+      >
         <img :src="iconNewExpense" alt="icon New Expense" @click="showModal" />
       </div>
       <Modal
@@ -367,5 +366,4 @@ main {
     font-size: 2.4rem;
   }
 }
-
 </style>
