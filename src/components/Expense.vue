@@ -57,58 +57,101 @@ const emit = defineEmits(['select-expense'])
 </template>
 
 <style scoped>
+.expense {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2.5rem 3rem;
+  margin-bottom: 2rem;
+  border-radius: 1.6rem;
+  background-color: var(--white);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-.expense{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
+.expense:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 12px 25px -8px rgba(0, 0, 0, 0.15);
 }
 
 .content {
-    align-items: center;
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
+/* Icon */
 .icon {
-width: 5rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  padding: 1.2rem;
+  border-radius: 50%;
+  background-color: var(--grey-light);
+}
+
+/* Details */
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
 
 .details p {
-margin: 0 0 1rem 0;
+  margin: 0;
 }
 
-.category {
-
-    color: var(--grey);
-    font-size: 1.2rem;
-    text-transform: uppercase;
-    font-weight: 900;
+/* Category */
+.details p:first-child {
+  color: var(--grey);
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: 0.5px;
 }
 
+/* Name */
 .name {
-color: var(--grey-dark);
-font-size: 2.4rem;
-font-weight: 700;
-cursor: pointer;
-
+  color: var(--grey-dark);
+  font-size: 2.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
+.name:hover {
+  color: var(--blue);
+}
+
+/* Date */
 .date {
-    color: var(--grey-dark);
-    font-size: 1.6rem;
-    font-weight: 900;
+  color: var(--grey);
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
 .date span {
-    font-weight: 400;
+  font-weight: 400;
 }
 
+/* Amount */
 .amount {
-    font-size: 3rem;
-    font-weight: 900;
-    margin: 0;
+  font-size: 3rem;
+  font-weight: 900;
+  margin: 0;
+  color: var(--grey-dark);
+}
+
+
+@media (max-width: 600px) {
+  .expense {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2rem;
+  }
+
+  .amount {
+    align-self: flex-end;
+    font-size: 2.6rem;
+  }
 }
 
 

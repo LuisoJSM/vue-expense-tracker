@@ -49,63 +49,86 @@ const props = defineProps({
 
 <style scoped>
 .two-columns {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
 }
 
-.two-columns> :first-child {
-    margin-bottom: 3rem;
+/* Graphic */
+.container-graphic {
+  display: flex;
+  justify-content: center;
 }
 
+.container-graphic img {
+  max-width: 22rem;
+  width: 100%;
+}
+
+/* Desktop layout */
 @media (min-width: 768px) {
-    .two-columns {
-        flex-direction: row;
-        gap: 4rem;
-        align-items: center;
-    }
+  .two-columns {
+    flex-direction: row;
+    align-items: center;
+    gap: 5rem;
+  }
 
-    .two-columns> :first-child {
-        margin-bottom: 0;
-    }
+  .container-graphic img {
+    max-width: 26rem;
+  }
 }
 
-.reset-app {
-    background-color: #DB2777;
-    border: none;
-    padding: 1rem;
-    width: 100%;
-    color: var(--white);
-    font-weight: 900;
-    text-transform: uppercase;
-    border-radius: 1rem;
-    transition-property: background-color;
-    transition-duration: 300ms;
-}
-.reset-app:hover {
-    cursor: pointer;
-    background-color: #be1360;
-}
-
+/* Budget panel */
 .container-budget {
-    width: 100%;
+  width: 100%;
+  display: grid;
+  gap: 2.5rem;
 }
 
+/* Reset button */
+.reset-app {
+  background-color: #db2777;
+  border: none;
+  padding: 1.3rem;
+  width: 100%;
+  color: var(--white);
+  font-weight: 900;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
 
+.reset-app:hover {
+  background-color: #be1360;
+  transform: translateY(-2px);
+}
+
+/* Budget values */
 .container-budget p {
-    font-size: 2.4rem;
-    text-align: center;
-    color: var(--grey-dark);
+  font-size: 2.2rem;
+  text-align: center;
+  color: var(--grey-dark);
+  margin: 0;
 }
-
 
 .container-budget span {
-    font-weight: 900;
-    color: var(--blue);
+  font-weight: 900;
+  color: var(--blue);
 }
 
-@media (min-width: 768px) {
-    .container-budget p {
-        text-align: left;
-    }
+
+.container-budget p:last-child span {
+  color: #db2777;
 }
+
+
+@media (min-width: 768px) {
+  .container-budget p {
+    text-align: left;
+    font-size: 2.3rem;
+  }
+}
+
 </style>

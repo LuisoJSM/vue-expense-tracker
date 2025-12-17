@@ -48,45 +48,72 @@ const setBudget = () => {
 
 <style scoped>
 .budget {
-   width: 100%;
+  width: 100%;
+  display: grid;
+  gap: 3rem;
 }
 
+/* Field */
 .field {
-   display: grid;
-   gap: 2rem;
+  display: grid;
+  gap: 1.5rem;
 }
 
+/* Label */
+.budget label {
+  font-size: 2.6rem;
+  text-align: center;
+  font-weight: 900;
+  color: var(--blue);
+}
+
+/* Input */
 .budget input[type="number"] {
-   background-color: var(--grey-light);
-   border-radius: 1rem;
-   padding: 1rem;
-   border: none;
-   font-size: 2.2rem;
-   text-align: center;
+  background-color: var(--grey-light);
+  border-radius: 1.2rem;
+  padding: 1.6rem;
+  border: 2px solid transparent;
+  font-size: 2.4rem;
+  text-align: center;
+  font-weight: 700;
+  transition: all 0.2s ease;
 }
 
+.budget input[type="number"]:focus {
+  outline: none;
+  border-color: var(--blue);
+  background-color: var(--white);
+}
 
+/* Submit button */
 .budget input[type="submit"] {
-   background-color: var(--blue);
-   border: none;
-   padding: 1rem;
-   text-align: center;
-   font-size: 2rem;
-   margin-top: 2rem;
-   color: var(--white);
-   font-weight: 900;
-   width: 100%;
-   transition: background-color 300ms ease;
+  background-color: var(--blue);
+  border: none;
+  padding: 1.6rem;
+  text-align: center;
+  font-size: 2rem;
+  color: var(--white);
+  font-weight: 900;
+  width: 100%;
+  border-radius: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .budget input[type="submit"]:hover {
-   background-color: #1048a4;
-   cursor: pointer;
+  background-color: #1048a4;
+  transform: translateY(-2px);
 }
 
-.budget label {
-   font-size: 2.8rem;
-   text-align: center;
-   color: var(--blue);
+
+@media (max-width: 480px) {
+  .budget label {
+    font-size: 2.2rem;
+  }
+
+  .budget input[type="number"] {
+    font-size: 2.1rem;
+  }
 }
+
 </style>

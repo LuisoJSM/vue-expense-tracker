@@ -74,7 +74,7 @@ const addExpense = () => {
       return
     }
   } else {
-    // Nex expense
+    // New expense
     if (amount > available) {
       error.value = "You have exceeded the available budget"
       setTimeout(() => error.value = "", 3000)
@@ -148,85 +148,129 @@ const addExpense = () => {
 
 <style scoped>
 .modal {
-  position: absolute;
-  background-color: rgb(0 0 0 / 0.9);
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
+  position: fixed;
+  inset: 0;
+  background-color: rgb(0 0 0 / 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
 }
 
+/* Close icon */
 .close-modal {
   position: absolute;
-  right: 3rem;
   top: 3rem;
+  right: 3rem;
 }
 
 .close-modal img {
   width: 3rem;
   cursor: pointer;
+  filter: brightness(0) invert(1);
 }
 
+/* Modal container */
 .container-form {
-  transition-property: all;
-  transition-duration: 300ms;
-  transition-timing-function: ease-in;
+  width: 90%;
+  max-width: 45rem;
+  background-color: var(--white);
+  border-radius: 1.6rem;
+  padding: 4rem;
+  box-shadow: 0px 20px 40px rgba(0, 0, 0, 0.3);
   opacity: 0;
+  transform: translateY(30px);
+  transition: all 300ms ease;
 }
 
 .container-form.animate {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .container-form.close {
   opacity: 0;
+  transform: translateY(30px);
 }
 
+/* Form */
 .new-expense {
-  margin: 10rem auto 0 auto;
   display: grid;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .new-expense legend {
   text-align: center;
-  color: var(--white);
-  font-size: 3rem;
-  font-weight: 700;
+  color: var(--grey-dark);
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 2rem;
 }
 
+/* Fields */
 .field {
   display: grid;
-  gap: 2rem;
+  gap: 1rem;
+}
+
+.new-expense label {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--grey-dark);
 }
 
 .new-expense input,
 .new-expense select {
   background-color: var(--grey-light);
   border-radius: 1rem;
-  padding: 1rem;
-  border: none;
-  font-size: 2.2rem;
+  padding: 1.4rem;
+  border: 2px solid transparent;
+  font-size: 1.8rem;
+  transition: all 0.2s ease;
 }
 
-.new-expense label {
-  color: var(--white);
+.new-expense input:focus,
+.new-expense select:focus {
+  outline: none;
+  border-color: var(--blue);
+  background-color: var(--white);
 }
 
+/* Submit button */
 .new-expense input[type="submit"] {
+  margin-top: 1rem;
+  padding: 1.5rem;
   background-color: var(--blue);
   color: var(--white);
-  font-weight: 700;
+  font-weight: 900;
+  font-size: 1.8rem;
+  border-radius: 1rem;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
+
+.new-expense input[type="submit"]:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+}
+
+/* Delete button */
 .btn-delete {
-  padding: 1rem;
+  margin-top: 3rem;
+  padding: 1.4rem;
   width: 100%;
   background-color: #ef4444;
-  font-weight: 700;
-  font-size: 1.8rem;
+  font-weight: 900;
+  font-size: 1.7rem;
   color: var(--white);
-  margin-top: 10rem;
+  border-radius: 1rem;
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
 }
+
+.btn-delete:hover {
+  background-color: #dc2626;
+  transform: translateY(-2px);
+}
+
 </style>

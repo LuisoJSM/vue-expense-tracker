@@ -4,6 +4,7 @@ import Budget from "./components/Budget.vue";
 import BudgetControl from "./components/BudgetControl.vue";
 import Expense from "./components/Expense.vue";
 import Modal from "./components/Modal.vue";
+import Filter from "./components/Filter.vue";
 import iconNewExpense from "./assets/img/nuevo-gasto.svg";
 import { generateId } from "./helpers";
 
@@ -130,7 +131,6 @@ const deleteExpense = () => {
       <h1>Expense tracker</h1>
       <div class="container-header container shadow">
         <Budget v-if="budget === 0" @set-budget="setBudget" />
-
         <BudgetControl
           v-else
           :budget="budget"
@@ -141,6 +141,7 @@ const deleteExpense = () => {
     </header>
 
     <main v-if="budget > 0">
+      <Filter />
       <div class="list-expense container">
         <h2>
           {{ expenses.length > 0 ? "Expenses" : "There's nothing to show" }}
@@ -198,6 +199,7 @@ body {
   font-size: 1.6rem;
   font-family: "Lato", sans-serif;
   background-color: var(--grey-light);
+  color: var(--grey-dark);
 }
 
 h1 {
@@ -205,7 +207,7 @@ h1 {
 }
 
 h2 {
-  font-size: 3rem;
+  font-size: 2.8rem;
 }
 
 .set {
@@ -213,17 +215,21 @@ h2 {
   height: 100vh;
 }
 
+/* HEADER */
 header {
-  background-color: var(--blue);
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
 }
 
 header h1 {
-  padding: 3rem 0;
+  padding: 3.5rem 0;
   margin: 0;
   color: var(--white);
   text-align: center;
+  font-weight: 900;
+  letter-spacing: 0.5px;
 }
 
+/* LAYOUT */
 .container {
   width: 90%;
   max-width: 80rem;
@@ -231,35 +237,79 @@ header h1 {
 }
 
 .container-header {
-  margin-top: -5rem;
-  transform: translateY(5rem);
+  margin-top: -6rem;
+  transform: translateY(6rem);
   padding: 5rem;
 }
 
+/* CARD */
 .shadow {
-  box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 12px 25px -8px rgba(0, 0, 0, 0.15);
   background-color: var(--white);
-  border-radius: 1.2rem;
+  border-radius: 1.6rem;
   padding: 5rem;
 }
 
-.create-expense {
-  position: fixed;
-  bottom: 5rem;
-  right: 5rem;
+/* MAIN */
+main {
+  padding-bottom: 12rem;
 }
 
-.create-expense img {
-  width: 5rem;
-  cursor: pointer;
-}
-
+/* LIST */
 .list-expense {
-  margin-top: 10rem;
+  margin-top: 8rem;
 }
 
 .list-expense h2 {
   font-weight: 900;
   color: var(--grey-dark);
+  margin-bottom: 4rem;
+  text-align: center;
 }
+
+/* FLOATING ACTION BUTTON */
+.create-expense {
+  position: fixed;
+  bottom: 4rem;
+  right: 4rem;
+  background-color: var(--blue);
+  width: 6.5rem;
+  height: 6.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 15px 30px rgba(59, 130, 246, 0.4);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.create-expense:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 20px 40px rgba(59, 130, 246, 0.5);
+}
+
+.create-expense img {
+  width: 3.2rem;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3.2rem;
+  }
+
+  .container-header {
+    padding: 4rem 3rem;
+  }
+
+  .shadow {
+    padding: 4rem 3rem;
+  }
+
+  .list-expense h2 {
+    font-size: 2.4rem;
+  }
+}
+
 </style>
