@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch, computed } from "vue";
+import { ref, reactive, watch, computed, onMounted } from "vue";
 import Budget from "./components/Budget.vue";
 import BudgetControl from "./components/BudgetControl.vue";
 import Expense from "./components/Expense.vue";
@@ -39,6 +39,8 @@ watch(
     );
     spent.value = totalSpent;
     available.value = budget.value - totalSpent;
+
+    localStorage.setItem('expenses', JSON.stringify(expenses.value))
   },
   {
     deep: true,
@@ -56,6 +58,26 @@ watch(
     deep: true,
   }
 );
+
+watch(budget, () => {
+  localStorage.setItem('budget', budget.value)
+});
+
+onMounted(() => {
+  const BudgetStorage = localStorage.getItem('budget');
+  if(BudgetStorage) {
+    budget.value = Number(BudgetStorage)
+    available.value = Number(BudgetStorage)
+  }
+
+
+  const expensesStorage = localStorage.getItem('expenses')
+  if(expensesStorage) {
+    expenses.value = JSON.parse(expensesStorage)
+  }
+
+})
+
 
 const setBudget = (amount) => {
   budget.value = amount;
@@ -132,6 +154,28 @@ const expensesFiltered = computed(() => {
   return expenses.value;
 })
 
+
+const resetApp = () => {
+  const confirmDelete = confirm("Are you sure you want to reset the app?")
+
+  if (!confirmDelete) return
+
+  
+  budget.value = 0
+  available.value = 0
+  spent.value = 0
+  expenses.value = []
+  filter.value = ''
+
+  
+  resetStateExpense()
+
+  
+  localStorage.removeItem('budget')
+  localStorage.removeItem('expenses')
+}
+
+
 </script>
 
 <template>
@@ -145,6 +189,7 @@ const expensesFiltered = computed(() => {
           :budget="budget"
           :available="available"
           :spent="spent"
+          @reset-app="resetApp"
         />
       </div>
     </header>
