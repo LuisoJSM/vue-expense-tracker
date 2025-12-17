@@ -1,16 +1,20 @@
-<script>
-export default {
+<script setup>
+const props = defineProps({
+  filter: {
+    type: String,
+    required: true
+  }
+})
 
-}
+const emit = defineEmits(['update:filter'])
 </script>
-
 
 <template>
     <div class="filters shadow container">
         <form>
             <div class="field">
                 <label for="filter">Filter Expenses</label>
-                <select id="filter" :value="category" @input="$emit('update:category', $event.target.value)">
+                <select id="filter" :value="filter" @input="$emit('update:filter', $event.target.value)">
                     <option value="">-- Select --</option>
                     <option value="savings">Savings</option>
                     <option value="food">Food</option>

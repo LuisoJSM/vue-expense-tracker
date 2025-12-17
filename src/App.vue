@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, computed } from "vue";
 import Budget from "./components/Budget.vue";
 import BudgetControl from "./components/BudgetControl.vue";
 import Expense from "./components/Expense.vue";
@@ -17,6 +17,8 @@ const budget = ref(0);
 
 const available = ref(0);
 const spent = ref(0);
+
+const filter = ref('');
 
 const expense = reactive({
   name: "",
@@ -123,6 +125,13 @@ const deleteExpense = () => {
   resetStateExpense()
 }
 
+const expensesFiltered = computed(() => {
+  if(filter.value) {
+    return expenses.value.filter(expense => expense.category === filter.value)
+  }
+  return expenses.value;
+})
+
 </script>
 
 <template>
@@ -141,14 +150,16 @@ const deleteExpense = () => {
     </header>
 
     <main v-if="budget > 0">
-      <Filter />
+      <Filter
+      v-model:filter="filter"
+      />
       <div class="list-expense container">
         <h2>
-          {{ expenses.length > 0 ? "Expenses" : "There's nothing to show" }}
+          {{ expensesFiltered.length > 0 ? "Expenses" : "There's nothing to show" }}
         </h2>
 
         <Expense
-          v-for="expense in expenses"
+          v-for="expense in expensesFiltered"
           :key="expense.id"
           :expense="expense"
           @select-expense="selectExpense"
