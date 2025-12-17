@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import closeModal from "../assets/img/cerrar.svg";
 import Alert from "./Alert.vue";
 
 const emit = defineEmits([
   "close-modal",
   "save-expense",
+  "delete-expense",
   "update:name",
   "update:amount",
   "update:category",
@@ -33,39 +34,56 @@ const props = defineProps({
   available: {
     type: Number,
     required: true,
+  },
+  id: {
+    type: [String, null],
+    required: true,
   }
 });
 
+
+const oldAmount = computed(() => Number(props.amount))
+
+const isEditing = computed(() => !!props.id)
+
+
 const addExpense = () => {
-  const { amount, category, name, available } = props;
-  if ([name, amount, category].includes("")) {
-    error.value = "Todos los campos son obligatorios";
-    setTimeout(() => {
-      error.value = "";
-    }, 3000);
-    return;
+  const { name, category, available } = props
+  const amount = Number(props.amount)
+
+  // Validate empty fields
+  if (!name || !category || !amount) {
+    error.value = "All fields are required"
+    setTimeout(() => error.value = "", 3000)
+    return
   }
 
+  // Validate amount
   if (amount <= 0) {
-    error.value = "La cantidad debe ser mayor que 0";
-    setTimeout(() => {
-      error.value = "";
-    }, 3000);
-    return;
+    error.value = "The amount must be greater than 0"
+    setTimeout(() => error.value = "", 3000)
+    return
   }
 
-  if (amount > available) {
-    error.value = "Has superado el presupuesto disponible";
-    setTimeout(() => {
-      error.value = "";
-    }, 3000);
-    return;
+  // Validate budget
+  if (props.id) {
+    // Edit expense
+    if (amount > oldAmount.value + available) {
+      error.value = "You have exceeded the available budget"
+      setTimeout(() => error.value = "", 3000)
+      return
+    }
+  } else {
+    // Nex expense
+    if (amount > available) {
+      error.value = "You have exceeded the available budget"
+      setTimeout(() => error.value = "", 3000)
+      return
+    }
   }
 
-  emit("save-expense");
-};
-
-
+  emit("save-expense")
+}
 
 </script>
 
@@ -75,12 +93,9 @@ const addExpense = () => {
       <img :src="closeModal" @click="$emit('close-modal')" />
     </div>
 
-    <div
-      class="container container-form"
-      :class="[modal.animate ? 'animate' : 'close']"
-    >
+    <div class="container container-form" :class="[modal.animate ? 'animate' : 'close']">
       <form class="new-expense" @submit.prevent="addExpense">
-        <legend>Add expense</legend>
+        <legend>{{ isEditing ? 'Save' : 'Add Expense' }}</legend>
 
         <Alert v-if="error">{{ error }}</Alert>
 
@@ -122,8 +137,11 @@ const addExpense = () => {
           </select>
         </div>
 
-        <input type="submit" value="Add Expense" />
+        <input type="submit" :value="isEditing ? 'Save' : 'Add Expense'" />
       </form>
+      <button v-if="isEditing" type="button" class="btn-delete" @click="$emit('delete-expense')">
+        Delete Expense
+      </button>
     </div>
   </div>
 </template>
@@ -199,6 +217,16 @@ const addExpense = () => {
   background-color: var(--blue);
   color: var(--white);
   font-weight: 700;
+  cursor: pointer;
+}
+.btn-delete {
+  padding: 1rem;
+  width: 100%;
+  background-color: #ef4444;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: var(--white);
+  margin-top: 10rem;
   cursor: pointer;
 }
 </style>
