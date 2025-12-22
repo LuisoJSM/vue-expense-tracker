@@ -1,5 +1,69 @@
-# Vue 3 + Vite
+# Expense Tracker
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A simple and clean expense tracking application built with **Vue 3** and **Vite**, designed to help users manage their personal budget and track daily expenses.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+This project was created as a learning exercise to practice Vue's **Composition API**, state management, and component-based architecture.
+
+---
+
+
+
+## Screenshots
+
+
+### Main view
+![Expense Tracker main view](./expense1.png)
+
+### Add / Edit expense
+![Expense Tracker modal](./expense2.png)
+
+
+---
+
+## Features
+
+- Set an initial budget
+- Add, edit and delete expenses
+- Categorize expenses
+- Real-time budget calculation
+- Visual progress indicator
+- Modal-based expense form
+- Responsive and minimal UI
+- Frontend-only (no backend)
+
+---
+
+## Stack
+
+- **Vue 3**
+- **Vite**
+- **JavaScript**
+- **CSS**
+
+---
+
+## What I learned
+
+- Vue 3 Composition API (`ref`, `reactive`, `computed`, `watch`)
+- Component communication using props and emits
+- Reactive state management
+- Modal handling and UI state
+- Data formatting and helpers
+- Clean project structure
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+```
+git clone https://github.com/LuisoJSM/vue-expense-tracker.git
+```
+### 2. Install dependencies
+```
+npm install
+```
+### 3. Run the development server
+```
+npm run dev
+```
