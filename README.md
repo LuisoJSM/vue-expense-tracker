@@ -11,13 +11,10 @@ This project was created as a learning exercise to practice Vue's **Composition 
 ## Screenshots
 
 
-### Main view
-![Expense Tracker main view](./expense1.png)
-
-### Add / Edit expense
-![Expense Tracker modal](./expense2.png)
-
-
+<p align="center">
+  <img src="./expense1.png" alt="Mobile main view" width="30%" />
+  <img src="./expense2.png" alt="Mobile add expense view" width="30%" />
+</p>
 ---
 
 ## Features
